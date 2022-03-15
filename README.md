@@ -446,3 +446,197 @@ vim-tiny/testing 2:8.2.3995-1+b2 arm64 [upgradable from: 2:8.2.3995-1]
 xxd/testing 2:8.2.3995-1+b2 arm64 [upgradable from: 2:8.2.3995-1]
 hbarta@rpi4-20220121:~$ 
 ```
+
+## 2022-03-15 testing with SD card
+
+Using the sysbench fileio test (from <https://raspberrypi.stackexchange.com/questions/3371/how-can-i-stress-test-my-raspberry-pi>)
+
+### Clean install to SD card and with no upgrades, update and sysbench only installed.
+
+```text
+time sysbench --test=fileio --file-total-size=2G prepare
+time sysbench --test=fileio --file-total-size=2G --file-test-mode=rndrw  --max-time=300 --max-requests=0 run
+time sysbench --test=fileio --file-total-size=2G cleanup
+```
+
+```text
+hbarta@down:~$ time sysbench --test=fileio --file-total-size=2G prepare
+WARNING: the --test option is deprecated. You can pass a script name or path on the command line without any options.
+sysbench 1.0.20 (using system LuaJIT 2.1.0-beta3)
+
+128 files, 16384Kb each, 2048Mb total
+Creating files for the test...
+Extra file open flags: (none)
+Creating file test_file.0
+Creating file test_file.1
+...
+Creating file test_file.126
+Creating file test_file.127
+2147483648 bytes written in 113.43 seconds (18.05 MiB/sec).
+
+real    1m53.458s
+user    0m0.153s
+sys     0m13.913s
+hbarta@down:~$
+
+
+hbarta@down:~$ time sysbench --test=fileio --file-total-size=2G --file-test-mode=rndrw  --max-time=300 --max-requests=0 run
+WARNING: the --test option is deprecated. You can pass a script name or path on the command line without any options.
+WARNING: --max-time is deprecated, use --time instead
+sysbench 1.0.20 (using system LuaJIT 2.1.0-beta3)
+
+Running the test with following options:
+Number of threads: 1
+Initializing random number generator from current time
+
+
+Extra file open flags: (none)
+128 files, 16MiB each
+2GiB total file size
+Block size 16KiB
+Number of IO requests: 0
+Read/Write ratio for combined random IO test: 1.50
+Periodic FSYNC enabled, calling fsync() each 100 requests.
+Calling fsync() at the end of test, Enabled.
+Using synchronous I/O mode
+Doing random r/w test
+Initializing worker threads...
+
+Threads started!
+
+
+File operations:
+    reads/s:                      6.22
+    writes/s:                     4.15
+    fsyncs/s:                     13.34
+
+Throughput:
+    read, MiB/s:                  0.10
+    written, MiB/s:               0.06
+
+General statistics:
+    total time:                          308.4489s
+    total number of events:              7188
+
+Latency (ms):
+         min:                                    0.00
+         avg:                                   41.79
+         max:                                 9009.86
+         95th percentile:                       68.05
+         sum:                               300392.74
+
+Threads fairness:
+    events (avg/stddev):           7188.0000/0.00
+    execution time (avg/stddev):   300.3927/0.00
+
+
+real    5m8.482s
+user    0m0.027s
+sys     0m0.333s
+hbarta@down:~$ 
+
+hbarta@down:~$ time sysbench --test=fileio --file-total-size=2G cleanup
+WARNING: the --test option is deprecated. You can pass a script name or path on the command line without any options.
+sysbench 1.0.20 (using system LuaJIT 2.1.0-beta3)
+
+Removing test files...
+
+real    0m0.651s
+user    0m0.012s
+sys     0m0.627s
+hbarta@down:~$
+```
+
+Upgrade `raspi-firmware`
+
+```text
+raspi-firmware/testing 1.20220120+ds-1 arm64 [upgradable from: 1.20210805+ds-1]
+```
+
+```text
+hbarta@down:~$ time sysbench --test=fileio --file-total-size=2G prepare
+WARNING: the --test option is deprecated. You can pass a script name or path on the command line without any options.
+sysbench 1.0.20 (using system LuaJIT 2.1.0-beta3)
+
+128 files, 16384Kb each, 2048Mb total
+Creating files for the test...
+Extra file open flags: (none)
+Creating file test_file.0
+Creating file test_file.1
+...
+Creating file test_file.126
+Creating file test_file.127
+2147483648 bytes written in 113.46 seconds (18.05 MiB/sec).
+
+real    1m53.568s
+user    0m0.160s
+sys     0m17.705s
+hbarta@down:~$ 
+
+
+hbarta@down:~$ time sysbench --test=fileio --file-total-size=2G --file-test-mode=rndrw  --max-time=300 --max-requests=0 run
+WARNING: the --test option is deprecated. You can pass a script name or path on the command line without any options.
+WARNING: --max-time is deprecated, use --time instead
+sysbench 1.0.20 (using system LuaJIT 2.1.0-beta3)
+
+Running the test with following options:
+Number of threads: 1
+Initializing random number generator from current time
+
+
+Extra file open flags: (none)
+128 files, 16MiB each
+2GiB total file size
+Block size 16KiB
+Number of IO requests: 0
+Read/Write ratio for combined random IO test: 1.50
+Periodic FSYNC enabled, calling fsync() each 100 requests.
+Calling fsync() at the end of test, Enabled.
+Using synchronous I/O mode
+Doing random r/w test
+Initializing worker threads...
+
+Threads started!
+
+
+File operations:
+    reads/s:                      5.73
+    writes/s:                     3.82
+    fsyncs/s:                     12.36
+
+Throughput:
+    read, MiB/s:                  0.09
+    written, MiB/s:               0.06
+
+General statistics:
+    total time:                          303.5714s
+    total number of events:              6525
+
+Latency (ms):
+         min:                                    0.01
+         avg:                                   46.02
+         max:                                 1880.98
+         95th percentile:                      634.66
+         sum:                               300250.09
+
+Threads fairness:
+    events (avg/stddev):           6525.0000/0.00
+    execution time (avg/stddev):   300.2501/0.00
+
+
+real    5m3.658s
+user    0m0.050s
+sys     0m0.291s
+hbarta@down:~$ 
+
+hbarta@down:~$ time sysbench --test=fileio --file-total-size=2G cleanup
+WARNING: the --test option is deprecated. You can pass a script name or path on the command line without any options.
+sysbench 1.0.20 (using system LuaJIT 2.1.0-beta3)
+
+Removing test files...
+
+real    0m1.648s
+user    0m0.020s
+sys     0m1.614s
+hbarta@down:~$
+```
