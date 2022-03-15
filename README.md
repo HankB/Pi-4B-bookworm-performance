@@ -1,6 +1,6 @@
 ## Pi 4B Bookworm performance
 
-Pi 4B seems to run much slower on Debian Bookworm than Dehbian Bullseye. (This is not about the Raspberry Pi OS.)
+Pi 4B seems to run much slower on Debian Bookworm than Debian Bullseye. (This is not about the Raspberry Pi OS.)
 
 ## Benchmarks - backstory
 
