@@ -446,3 +446,24 @@ vim-tiny/testing 2:8.2.3995-1+b2 arm64 [upgradable from: 2:8.2.3995-1]
 xxd/testing 2:8.2.3995-1+b2 arm64 [upgradable from: 2:8.2.3995-1]
 hbarta@rpi4-20220121:~$ 
 ```
+
+## raspi-firmware update
+
+To further track down the cause I started installing some packages that I thought might be the culprit and installed the following from the list of updates. Packages paired together were installed together and following each install I rebooted and tested using `lscpu` and `sysbench`. Following the install of `raspi-firmware` the performance regression appeared.
+
+```text
+init-system-helpers/testing 1.62 all [upgradable from: 1.61]
+init/testing 1.62 arm64 [upgradable from: 1.61]
+
+libbpf0/testing 1:0.7.0-2 arm64 [upgradable from: 1:0.5.0-1]
+
+libprocps8/testing 2:3.3.17-7+b1 arm64 [upgradable from: 2:3.3.17-6]
+procps/testing 2:3.3.17-7+b1 arm64 [upgradable from: 2:3.3.17-6]
+
+libsystemd0/testing 250.3-2 arm64 [upgradable from: 250.2-3]
+systemd/testing 250.3-2 arm64 [upgradable from: 250.2-3]
+
+libudev1/testing 250.3-2 arm64 [upgradable from: 250.2-3]
+
+raspi-firmware/testing 1.20220120+ds-1 arm64 [upgradable from: 1.20210805+ds-1]
+```
