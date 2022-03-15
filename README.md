@@ -661,3 +661,28 @@ user    0m0.020s
 sys     0m1.614s
 hbarta@down:~$
 ```
+
+## 2022-03-15 narrow down the offending commit
+
+<https://github.com/raspberrypi/firmware/tags?>
+
+Procedure (suggested by Diederik de Haas.)
+
+* Install fresh copy of OS and update/upgrade all packages except `raspi-config`
+* Reboot and confirm normal operation
+
+* Save a copy of /boot/firmware
+* Download a tag (choose by binary search/bisect)
+* Extract somewhere convenient.
+* Copy `bootcode.bin`,`*.dat` and `*.elf` to `/boot/firmware/`
+* Reboot and test
+* rinse repeat.
+
+|tag|result|comment|
+|---|---|---|
+|1.20211007|good||
+|1.20220118|bad||
+|1.20211029|good||
+|1.20211118|good||
+|1.20220308|bad|most recent|
+|1.20211118|good|double check|
